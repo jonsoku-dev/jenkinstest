@@ -8,7 +8,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID = credentials('awsAccessKeyId')
         AWS_SECRET_ACCESS_KEY = credentials('awsSecretAccessKey')
-        AWS_DEFAULT_REGION = credentials('ap-northeast-1')
+        AWS_DEFAULT_REGION = 'ap-northeast-1'
         HOME = '.' // Avoid npm root owned
     }
 
@@ -18,11 +18,11 @@ pipeline {
             agent any
 
             steps {
-                echo "Lets start Long Journey !"
-                echo "Clonning Repository"
+                echo 'Lets start Long Journey !'
+                echo 'Clonning Repository'
 
-                git url: 'https://github.com/jonsoku2/jenkinstest.git',
-                    branch: 'master',
+                git url: 'https://github.com/jonsoku2/jenkinstest',
+                    branch: 'main',
                     credentialsId: 'gittest'
 
             }
@@ -36,11 +36,11 @@ pipeline {
                 }
 
                 always {
-                    echo "I tried..."
+                    echo 'I tried..'
                 }
 
                 cleanup {
-                    echo "after all other post condition"
+                    echo 'after all other post condition'
                 }
             }
         }
@@ -62,31 +62,14 @@ pipeline {
                 // 프론트엔드 디렉토리의 정적파일들을 s3 에 올림, 이전에 반드시 EC2 instance profile 을 등록해야함.
                 dir ('./website') {
                     sh '''
-                    aws s3 sync ./ s3://jonsokubucket
+                    aws s3 sync ./ s3://jonsokubucket2
                     '''
                 }
 
             }
-
-            post {
-                success {
-                    echo 'Successfully Cloned Repository'
-
-                    mail to: 'the2792@gmail.com'
-                         subject: 'Deploy Frontend Success'
-                         body: "Successfully deployed frontend!"
-                }
-                failure {
-                    echo 'I failed :('
-
-                    mail to: 'the2792@gmail.com'
-                         subject: 'Failed Pipeline'
-                         body: "Something is wron with deploy frontend"
-                }
-            }
         }
 
-        stage('Lint Backend') {
+        stage('Install Backend') {
             // Docker plugin and Docker Pipeline 두개를 깔아야 사용 가능 ! 서버에서 직접설치
             agent {
                 docker {
@@ -97,7 +80,7 @@ pipeline {
             steps {
                 dir ('./server') {
                     sh '''
-                    npm install && npm run lint
+                    npm install
                     '''
                 }
             }
@@ -110,7 +93,7 @@ pipeline {
 
                 dir ('./server') {
                     sh '''
-                    docker build . -t server --build-arg env=${PROD}
+                    docker build . -t server
                     '''
                 }
             }
@@ -127,21 +110,21 @@ pipeline {
             steps {
                 echo 'Build Backend'
 
-                dir('./server') {
+                dir ('./server') {
                     sh '''
-                    docker rm -f $(docker ps -aq)
+                    docker rm -f \$(docker ps -aq)
                     docker run -p 80:80 -d server
                     '''
                 }
             }
 
-            post {
-                success {
-                    mail to: 'the2792@gmail.com'
-                         subject: 'Deploy success'
-                         body: "Successfully deployed!"
-                }
-            }
+//             post {
+//                 success {
+//                     mail to: 'the2792@gmail.com',
+//                          subject: 'Deploy success',
+//                          body: 'Deploy success'
+//                 }
+//             }
         }
     }
 }
