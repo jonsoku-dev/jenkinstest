@@ -20,9 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9357cf4e-cfbd-4b3c-ad5f-4dfc76e947fb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/server/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
     </list>
@@ -64,7 +62,7 @@
       <updated>1611933784985</updated>
       <workItem from="1611933786037" duration="33000" />
       <workItem from="1611933822957" duration="719000" />
-      <workItem from="1611934556675" duration="6759000" />
+      <workItem from="1611934556675" duration="7280000" />
     </task>
     <servers />
   </component>
